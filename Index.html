@@ -1,1 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación: Historia Clínica</title>
+    <!-- Incluye Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración de Tailwind para usar el color Inter (si fuera necesario, aquí se podría configurar) y extender colores/tipografías -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3B82F6', // Un azul vibrante
+                        secondary: '#60A5FA', // Un azul más claro
+                        accent: '#EF4444', // Un rojo para acentos o riesgos
+                        textDark: '#1F2937', // Texto oscuro
+                        textLight: '#F3F4F6', // Texto claro
+                        bgLight: '#F9FAFB', // Fondo claro
+                        bgDark: '#111827', // Fondo oscuro
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter para una tipografía limpia y legible -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f3f4f6; /* Fondo general de la página */
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Evita el scroll horizontal */
+        }
+        /* Estilos para el scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Estilos para las diapositivas */
+        .slide {
+            height: 100vh; /* Cada diapositiva ocupa el 100% de la altura de la vista */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            box-sizing: border-box;
+            color: #1F2937; /* Color de texto predeterminado para las diapositivas */
+            text-align: center;
+            transition: background-color 0.5s ease-in-out;
+        }
+        /* Colores de fondo alternos para las diapositivas */
+        .slide:nth-child(even) {
+            background-color: #e0f2fe; /* Un azul claro */
+        }
+        .slide:nth-child(odd) {
+            background-color: #ffffff; /* Blanco */
+        }
+
+        /* Estilos para el contenedor de contenido dentro de la diapositiva */
+        .slide-content {
+            background-color: rgba(255, 255, 255, 0.95); /* Fondo blanco semitransparente */
+            border-radius: 1.5rem; /* Bordes redondeados */
+            padding: 2.5rem;
+            max-width: 900px; /* Ancho máximo para el contenido */
+            width: 100%;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Sombra suave */
+            backdrop-filter: blur(5px); /* Efecto de desenfoque */
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+        }
+
+        /* Estilos para las listas */
+        .slide-content ul {
+            list-style: none; /* Elimina los puntos predeterminados */
+            padding-left: 0;
+            text-align: left; /* Alinea el texto a la izquierda dentro del contenido */
+            margin-top: 1.5rem;
+        }
+
+        .slide-content ul li {
+            position: relative;
+            padding-left: 1rem; /* Ajuste el padding ya que no hay icono */
+            margin-bottom: 0.75rem; /* Espacio entre ítems de la lista */
+            font-size: 1.125rem; /* Texto más grande para mejor legibilidad */
+            line-height: 1.6;
+            color: #374151; /* Color de texto para los ítems */
+        }
+
+        /* Eliminamos el estilo para el pseudo-elemento ::before que agregaba el checkmark */
+        .slide-5 ul li::before {
+            content: ''; /* Vacío para eliminar el ícono */
+            padding: 0; /* Asegura que no ocupe espacio */
+        }
+
+        /* Botones de navegación */
+        .nav-button {
+            background-color: #3B82F6; /* Azul primario */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* Píldora */
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-button:hover {
+            background-color: #2563EB; /* Azul más oscuro al pasar el ratón */
+            transform: translateY(-2px); /* Pequeño efecto de elevación */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-button.active {
+            background-color: #1D4ED8; /* Azul más oscuro para el botón activo */
+            border: 2px solid #BFDBFE; /* Borde más claro */
+            transform: translateY(0);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.15); /* Sombra interna para indicar activo */
+        }
+
+        /* Media queries para responsividad */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 1rem;
+            }
+            .slide-content {
+                padding: 1.5rem;
+                border-radius: 1rem;
+            }
+            .slide-content h1 {
+                font-size: 1.875rem; /* Título más pequeño en móviles */
+            }
+            .slide-content p, .slide-content ul li {
+                font-size: 1rem; /* Texto más pequeño en móviles */
+            }
+            .nav-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            .navigation-dots {
+                gap: 0.5rem; /* Menos espacio entre los puntos */
+            }
+            .dot {
+                width: 10px;
+                height: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter">
+
+    <!-- Contenedor principal de la presentación -->
+    <div class="min-h-screen">
+
+        <!-- Diapositiva 1: Marco normativo en Panamá -->
+        <section id="slide1" class="slide">
+            <div class="slide-content">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary flex items-center justify-center">
+                    Normativa vigente sobre historia clínica
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
+                    La documentación clínica es un pilar fundamental en la atención sanitaria, regida por un marco legal estricto en Panamá que garantiza la calidad, seguridad y confidencialidad.
+                </p>
+                <ul class="text-lg md:text-xl space-y-3">
+                    <li><strong class="text-primary">Decreto Ejecutivo N° 140 (2012):</strong> Regula el contenido, uso y custodia de la historia clínica.</li>
+                    <li><strong class="text-primary">Ley 68 (2003):</strong> Establece los derechos y deberes de los pacientes.</li>
+                    <li><strong class="text-primary">Resoluciones MINSA y CSS:</strong> Complementan la normativa con normas internas y técnicas específicas.</li>
+                    <li><strong class="text-primary">Código de Ética Médica:</strong> Enfatiza la documentación clínica como una responsabilidad ética y legal ineludible.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Diapositiva 2: ¿Qué debe contener una historia clínica válida? -->
+        <section id="slide2" class="slide">
+            <div class="slide-content">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary flex items-center justify-center">
+                    ¿Qué debe contener una historia clínica válida?
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
+                    Para que una historia clínica tenga validez legal y clínica, debe cumplir con estándares específicos de contenido y formato.
+                </p>
+                <ul class="text-lg md:text-xl space-y-3">
+                    <li><strong class="text-primary">Datos completos del paciente:</strong> Nombre, cédula, edad, etc.</li>
+                    <li><strong class="text-primary">Diagnóstico médico:</strong> Claro, preciso y debidamente justificado.</li>
+                    <li><strong class="text-primary">Evolución clínica:</strong> Registrada de forma cronológica y detallada.</li>
+                    <li><strong class="text-primary">Indicaciones terapéuticas:</strong> Claras, completas y legibles.</li>
+                    <li><strong class="text-primary">Firma, fecha y registro:</strong> Del médico tratante en cada entrada.</li>
+                    <li><strong class="text-primary">Registros auxiliares:</strong> Enfermería, fisioterapia, interconsultas, laboratorio, etc.</li>
+                    <li><strong class="text-primary">Órdenes médicas:</strong> Que respalden medicamentos y procedimientos realizados.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Diapositiva 3: Riesgos por incumplimiento -->
+        <section id="slide3" class="slide">
+            <div class="slide-content">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-accent flex items-center justify-center">
+                    Riesgos por errores u omisiones
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
+                    El incumplimiento en la correcta documentación de la historia clínica puede acarrear graves consecuencias legales, financieras y de calidad asistencial.
+                </p>
+                <ul class="text-lg md:text-xl space-y-3">
+                    <li><strong class="text-accent">Rechazo de facturación:</strong> Por parte de aseguradoras.</li>
+                    <li><strong class="text-accent">Riesgo legal:</strong> Demandas, acusaciones de mala praxis o negligencia documental.</li>
+                    <li><strong class="text-accent">Pérdida de trazabilidad clínica:</strong> Dificultando el seguimiento del paciente.</li>
+                    <li><strong class="text-accent">Compromete la continuidad del cuidado:</strong> Afectando la seguridad del paciente.</li>
+                    <li><strong class="text-accent">Debilita la credibilidad:</strong> Institucional y médica.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Diapositiva 4: Historia Clínica Digital en PMC / HomeHealth -->
+        <section id="slide4" class="slide">
+            <div class="slide-content">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary flex items-center justify-center">
+                    Historia Clínica Digital en PMC / HomeHealth
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
+                    La implementación de la historia clínica digital ofrece eficiencia y seguridad, siempre que cumpla con las normativas panameñas.
+                </p>
+                <ul class="text-lg md:text-xl space-y-3">
+                    <li><strong class="text-primary">Uso autorizado en Panamá si garantiza:</strong>
+                        <ul class="ml-8 mt-2 text-base md:text-lg space-y-1">
+                            <li><span class="font-semibold">Seguridad de acceso</span> por usuario individual.</li>
+                            <li><span class="font-semibold">Trazabilidad de modificaciones.</span></li>
+                            <li><span class="font-semibold">Firma digital</span> identificable.</li>
+                            <li><span class="font-semibold">Acceso completo</span> ante auditoría o solicitud del paciente.</li>
+                        </ul>
+                    </li>
+                    <li class="mt-4"><strong class="text-primary">¡PMC/HomeHealth cumple con todos estos requisitos!</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Diapositiva 5: Buenas prácticas en documentación -->
+        <section id="slide5" class="slide slide-5">
+            <div class="slide-content">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary flex items-center justify-center">
+                    Buenas prácticas en documentación
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
+                    Adoptar estas prácticas asegura la integridad y la utilidad de cada historia clínica, beneficiando tanto a pacientes como a profesionales de la salud.
+                </p>
+                <ul class="text-lg md:text-xl space-y-3">
+                    <li>Evitar abreviaturas dudosas o sin estandarizar.</li>
+                    <li>Toda indicación médica debe tener nota y orden explícitas.</li>
+                    <li>El diagnóstico debe justificar claramente el tratamiento propuesto.</li>
+                    <li>No usar textos genéricos como "paciente estable" sin detalles específicos.</li>
+                    <li>Los medicamentos deben coincidir entre orden, tarjeta de medicación y bitácora.</li>
+                    <li>Redacción técnica, sin faltas ortográficas y con lenguaje clínico apropiado.</li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Navegación de puntos -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 md:space-x-4 z-50 navigation-dots">
+        <a href="#slide1" class="dot w-3 h-3 md:w-4 md:h-4 bg-gray-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-primary" data-slide="1"></a>
+        <a href="#slide2" class="dot w-3 h-3 md:w-4 md:h-4 bg-gray-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-primary" data-slide="2"></a>
+        <a href="#slide3" class="dot w-3 h-3 md:w-4 md:h-4 bg-gray-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-primary" data-slide="3"></a>
+        <a href="#slide4" class="dot w-3 h-3 md:w-4 md:h-4 bg-gray-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-primary" data-slide="4"></a>
+        <a href="#slide5" class="dot w-3 h-3 md:w-4 md:h-4 bg-gray-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-primary" data-slide="5"></a>
+    </div>
+
+    <script>
+        // JavaScript para resaltar el punto de navegación activo y manejar el scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const navDots = document.querySelectorAll('.dot');
+
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.7 // La diapositiva se considera visible cuando el 70% está en el viewport
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentSlideId = entry.target.id;
+                        navDots.forEach(dot => {
+                            // Remueve la clase 'active' de todos los puntos
+                            dot.classList.remove('active', 'bg-primary');
+                            dot.classList.add('bg-gray-400');
+                            // Agrega la clase 'active' al punto correspondiente
+                            if (dot.getAttribute('href') === `#${currentSlideId}`) {
+                                dot.classList.add('active', 'bg-primary');
+                                dot.classList.remove('bg-gray-400');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            // Observa cada diapositiva
+            slides.forEach(slide => {
+                observer.observe(slide);
+            });
+
+            // Agrega el evento de clic a los puntos de navegación para un scroll suave
+            navDots.forEach(dot => {
+                dot.addEventListener('click', function(e) {
+                    e.preventDefault(); // Evita el comportamiento predeterminado del enlace
+                    const targetId = this.getAttribute('href');
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
 
